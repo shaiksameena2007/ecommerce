@@ -1,4 +1,4 @@
-# Myntra Clone - Modern eCommerce Website
+# Trendify- Modern eCommerce Website
 
 A modern and fully functional e-commerce web application, inspired by Myntra. This project provides a comprehensive online shopping experience with a clean user interface, seamless navigation, and smooth animations.
 
