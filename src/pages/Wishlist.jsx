@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { X } from 'lucide-react';
 
 const Wishlist = () => {
-    const { wishlist, toggleWishlist, addToCart } = useApp();
+    const { wishlist, toggleWishlist, moveToCart } = useApp();
 
     if (wishlist.length === 0) {
         return (
@@ -20,24 +20,39 @@ const Wishlist = () => {
 
     return (
         <div className="max-w-7xl mx-auto px-6 py-10">
-            <h2 className="text-xl font-bold mb-8 uppercase">My Wishlist ({wishlist.length} Items)</h2>
+            <h2 className="text-xl font-bold mb-8 uppercase">
+                My Wishlist ({wishlist.length} Items)
+            </h2>
+
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
                 {wishlist.map(product => (
                     <div key={product.id} className="border rounded relative group">
+                        
+                        {/* Remove button */}
                         <button
                             onClick={() => toggleWishlist(product)}
                             className="absolute top-2 right-2 bg-white/80 p-1 rounded-full text-gray-400 hover:text-red-500 transition z-10"
                         >
                             <X size={18} />
                         </button>
+
+                        {/* Image */}
                         <div className="aspect-[3/4] overflow-hidden">
-                            <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+                            <img
+                                src={product.image}
+                                alt={product.name}
+                                className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                            />
                         </div>
+
+                        {/* Details */}
                         <div className="p-4 space-y-2">
                             <h3 className="font-bold text-sm truncate">{product.name}</h3>
                             <p className="font-bold">Rs. {product.price}</p>
+
+                            {/* 🔥 Move to Cart */}
                             <button
-                                onClick={() => addToCart(product)}
+                                onClick={() => moveToCart(product)}
                                 className="w-full border border-primary text-primary py-2 text-xs font-bold uppercase rounded hover:bg-primary hover:text-white transition"
                             >
                                 Move to Bag

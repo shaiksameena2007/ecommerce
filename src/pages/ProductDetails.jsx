@@ -124,7 +124,16 @@ const ProductDetails = () => {
                     <div className="flex space-x-4 pt-4">
                         {/* Add to Bag */}
                         <button
-                            onClick={() => addToCart(product)}
+                            onClick={() =>
+                                     addToCart({
+                                     id: product.id,
+                                     name: product.title,
+                                     image: product.thumbnail || product.images?.[0],
+                                     category: product.category,
+                                     price: product.price,
+                                     quantity: 1
+                                               })
+               }
                             className="flex-grow flex items-center justify-center space-x-3 bg-primary text-white py-4 rounded font-bold uppercase tracking-widest hover:opacity-90 transition"
                         >
                             <ShoppingBag size={20} />

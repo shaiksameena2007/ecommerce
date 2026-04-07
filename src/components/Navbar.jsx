@@ -14,9 +14,7 @@ const Navbar = () => {
                 </Link>
 
                 <div className="hidden md:flex space-x-8 font-semibold text-sm uppercase">
-                    <Link to="/shop?category=Men" className="hover:text-primary transition">Men</Link>
-                    <Link to="/shop?category=Women" className="hover:text-primary transition">Women</Link>
-                    <Link to="/shop?category=Kids" className="hover:text-primary transition">Kids</Link>
+                    
                     <Link to="/shop" className="hover:text-primary transition">Studio</Link>
                 </div>
 

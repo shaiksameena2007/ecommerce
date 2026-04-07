@@ -82,7 +82,7 @@ const Shop = () => {
                         className="border p-2 rounded text-sm outline-none"
                         value={sortOption}
                         onChange={(e) => setSortOption(e.target.value)}
-                    >
+                    > 
                         <option>Recommended</option>
                         <option>Price: Low to High</option>
                         <option>Price: High to Low</option>
@@ -135,7 +135,16 @@ const Shop = () => {
                             {/* Buttons */}
                             <div className="flex gap-2 mt-4 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition duration-300">
                                 <button
-                                    onClick={() => addToCart(product)}
+                                    onClick={() =>
+                                         addToCart({
+                                                      id: product.id,
+                                                      name: product.title,
+                                                      image: product.thumbnail || product.images?.[0],
+                                                      category: product.category,
+                                                      price: product.price,
+                                                      quantity: 1
+                                                    })
+                                             }
                                     className="w-1/2 bg-primary text-white font-bold py-2 rounded uppercase tracking-wider text-xs hover:opacity-90"
                                 >
                                     Add to Bag

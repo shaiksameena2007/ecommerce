@@ -8,7 +8,16 @@ export const AppProvider = ({ children }) => {
     const [wishlist, setWishlist] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    // Authentication
+    // 🔥 Normalize product data
+    const formatProduct = (product) => ({
+        id: product.id,
+        name: product.name || product.title,
+        image: product.image || product.thumbnail || product.images?.[0],
+        category: product.category,
+        price: product.price,
+    });
+
+    // ================= AUTH =================
     const login = (userData) => {
         setUser(userData);
         localStorage.setItem('user', JSON.stringify(userData));
@@ -24,16 +33,22 @@ export const AppProvider = ({ children }) => {
         localStorage.setItem('user', JSON.stringify(userData));
     };
 
-    // Cart Management
+    // ================= CART =================
     const addToCart = (product) => {
+        const formatted = formatProduct(product);
+
         setCart((prevCart) => {
-            const existing = prevCart.find((item) => item.id === product.id);
+            const existing = prevCart.find((item) => item.id === formatted.id);
+
             if (existing) {
                 return prevCart.map((item) =>
-                    item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+                    item.id === formatted.id
+                        ? { ...item, quantity: item.quantity + 1 }
+                        : item
                 );
             }
-            return [...prevCart, { ...product, quantity: 1 }];
+
+            return [...prevCart, { ...formatted, quantity: 1 }];
         });
     };
 
@@ -44,23 +59,52 @@ export const AppProvider = ({ children }) => {
     const updateQuantity = (productId, quantity) => {
         setCart((prevCart) =>
             prevCart.map((item) =>
-                item.id === productId ? { ...item, quantity: Math.max(1, quantity) } : item
+                item.id === productId
+                    ? { ...item, quantity: Math.max(1, quantity) }
+                    : item
             )
         );
     };
 
-    // Wishlist Management
+    // ================= WISHLIST =================
     const toggleWishlist = (product) => {
+        const formatted = formatProduct(product);
+
         setWishlist((prev) => {
-            const exists = prev.find((item) => item.id === product.id);
+            const exists = prev.find((item) => item.id === formatted.id);
+
             if (exists) {
-                return prev.filter((item) => item.id !== product.id);
+                return prev.filter((item) => item.id !== formatted.id);
             }
-            return [...prev, product];
+
+            return [...prev, formatted];
         });
     };
 
-    // Load state from local storage on init
+    // 🔥 NEW: Move to Cart + Remove from Wishlist
+    const moveToCart = (product) => {
+        const formatted = formatProduct(product);
+
+        // Add to cart
+        setCart((prevCart) => {
+            const existing = prevCart.find((item) => item.id === formatted.id);
+
+            if (existing) {
+                return prevCart.map((item) =>
+                    item.id === formatted.id
+                        ? { ...item, quantity: item.quantity + 1 }
+                        : item
+                );
+            }
+
+            return [...prevCart, { ...formatted, quantity: 1 }];
+        });
+
+        // Remove from wishlist
+        setWishlist((prev) => prev.filter((item) => item.id !== formatted.id));
+    };
+
+    // ================= LOAD =================
     useEffect(() => {
         const savedUser = localStorage.getItem('user');
         if (savedUser) setUser(JSON.parse(savedUser));
@@ -72,7 +116,7 @@ export const AppProvider = ({ children }) => {
         if (savedWishlist) setWishlist(JSON.parse(savedWishlist));
     }, []);
 
-    // Save state to local storage
+    // ================= SAVE =================
     useEffect(() => {
         localStorage.setItem('cart', JSON.stringify(cart));
     }, [cart]);
@@ -94,6 +138,7 @@ export const AppProvider = ({ children }) => {
                 updateQuantity,
                 wishlist,
                 toggleWishlist,
+                moveToCart, // ✅ NEW FUNCTION
                 loading,
                 setLoading
             }}
